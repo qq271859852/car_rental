@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CarMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.bean.entity.Car">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="license_plate_number" jdbcType="VARCHAR" property="licensePlateNumber" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="buying_price" jdbcType="BIGINT" property="buyingPrice" />
+    <result column="reserve_price" jdbcType="BIGINT" property="reservePrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, license_plate_number, model, buying_price, reserve_price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from car
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAllCarModel" resultType="java.lang.String">
+    select distinct model
+    from car;
+  </select>
+  <select id="search" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from car
+    <where>
+      <if test="model != null">
+        and model like "%"#{model,jdbcType=VARCHAR}"%"
+      </if>
+    </where>
+    limit 10;
+  </select>
+</mapper>
